@@ -101,7 +101,7 @@ else
 fi
 cat << EOF
 <h1>Services</h1>
-<ul>
+<ul class=services>
 EOF
 for file in "${TMP_DIR}/"*.ko; do
     [ -e "${file}" ] || continue
