@@ -35,7 +35,7 @@ check(){
             if [ -s "${TMP_DIR}/${id}.ko.info" ]; then
                 sed -e 's,curl: ([0-9]*) ,,' -i "${TMP_DIR}/${id}.ko.info"
             else
-                echo "Status code: ${rc}, expected: ${expected_rc}" > "${TMP_DIR}/${id}.ko.info"
+                echo "recd. ${rc}, expd. ${expected_rc}" > "${TMP_DIR}/${id}.ko.info"
             fi;;
         ping*)
             ping -${ipversion}W "${TIMEOUT}" -c 1 "${host}" >/dev/null 2>&1
@@ -84,25 +84,373 @@ cat << EOF
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 		<title>${TITLE}</title>
 		<style type="text/css">
-			html { background: #f8f8f8; color: #222 }
-			body { font-family: sans-serif }
-			h1 { margin-top: 3rem; }
-			ul { padding: 0px; }
-			li { list-style: none; padding: 1rem; border-bottom: 2px solid #f8f8f8; font-weight: 500;}
-			.container { max-width: 600px; width: 100%; margin: 50px auto; }
-			.panel { text-align: center; padding: 10px; border: 0px; border-radius: 0.5rem; }
-			.failed-bg  { color: white; background-color: darkred; }
-			.success-bg { color: white; background-color: darkgreen; }
-			.failed  { color: darkred; }
-			.success { color: darkgreen; }
-			.small { font-size: .8rem; }
-			.status { float: right; }
-			.services { background: #eee; border-radius: .5rem }
+		html {
+		  line-height: 1.75;
+		  -webkit-text-size-adjust: 100%;
+		}
+
+		body {
+		  margin: 0;
+		}
+
+		main {
+		  display: block;
+		}
+
+		h1 {
+		  font-size: 2em;
+		  margin: 0.67em 0;
+		}
+
+		hr {
+		  box-sizing: content-box;
+		  height: 0;
+		  overflow: visible;
+		}
+
+		pre {
+		  font-family: monospace, monospace;
+		  font-size: 1em;
+		}
+
+		a {
+		  background-color: transparent;
+		}
+
+		abbr[title] {
+		  border-bottom: none;
+		  text-decoration: underline;
+		  text-decoration: underline dotted;
+		}
+
+		b,
+		strong {
+		  font-weight: bolder;
+		}
+
+		code,
+		kbd,
+		samp {
+		  font-family: monospace, monospace;
+		  font-size: 1em;
+		}
+
+		small {
+		  font-size: 80%;
+		}
+
+		sub,
+		sup {
+		  font-size: 75%;
+		  line-height: 0;
+		  position: relative;
+		  vertical-align: baseline;
+		}
+
+		sub {
+		  bottom: -0.25em;
+		}
+
+		sup {
+		  top: -0.5em;
+		}
+
+		img {
+		  border-style: none;
+		}
+
+		button,
+		input,
+		optgroup,
+		select,
+		textarea {
+		  font-family: inherit;
+		  font-size: 100%;
+		  line-height: 1.15;
+		  margin: 0;
+		}
+
+		button,
+		input {
+		  overflow: visible;
+		}
+
+		button,
+		select {
+		  text-transform: none;
+		}
+
+		button,
+		[type="button"],
+		[type="reset"],
+		[type="submit"] {
+		  -webkit-appearance: button;
+		}
+
+		button::-moz-focus-inner,
+		[type="button"]::-moz-focus-inner,
+		[type="reset"]::-moz-focus-inner,
+		[type="submit"]::-moz-focus-inner {
+		  border-style: none;
+		  padding: 0;
+		}
+
+		button:-moz-focusring,
+		[type="button"]:-moz-focusring,
+		[type="reset"]:-moz-focusring,
+		[type="submit"]:-moz-focusring {
+		  outline: 1px dotted ButtonText;
+		}
+
+		fieldset {
+		  padding: 0.35em 0.75em 0.625em;
+		}
+
+		legend {
+		  box-sizing: border-box;
+		  color: inherit;
+		  display: table;
+		  max-width: 100%;
+		  padding: 0;
+		  white-space: normal;
+		}
+
+		progress {
+		  vertical-align: baseline;
+		}
+
+		textarea {
+		  overflow: auto;
+		}
+
+		[type="checkbox"],
+		[type="radio"] {
+		  box-sizing: border-box;
+		  padding: 0;
+		}
+
+		[type="number"]::-webkit-inner-spin-button,
+		[type="number"]::-webkit-outer-spin-button {
+		  height: auto;
+		}
+
+		[type="search"] {
+		  -webkit-appearance: textfield;
+		  outline-offset: -2px;
+		}
+
+		[type="search"]::-webkit-search-decoration {
+		  -webkit-appearance: none;
+		}
+
+		::-webkit-file-upload-button {
+		  -webkit-appearance: button;
+		  font: inherit;
+		}
+
+		details {
+		  display: block;
+		}
+
+		summary {
+		  display: list-item;
+		}
+
+		template {
+		  display: none;
+		}
+
+		[hidden] {
+		  display: none;
+		}
+
+		html {
+		  box-sizing: border-box;
+		}
+
+		*,
+		*:before,
+		*:after {
+		  box-sizing: inherit;
+		}
+
+		:root {
+		  --background: #f8f8f8;
+		  --subtle: #eee;
+		  --foreground: #222;
+		  --sub: #666;
+		  --hover: #dfdfdf;
+		}
+
+		body {
+		  font-family: sans-serif;
+		  background-color: var(--background);
+		  -webkit-text-size-adjust: 100%;
+		  font-size: 1rem;
+		  font-weight: 400;
+		  padding: 1em;
+		  margin: auto;
+		  max-width: 42rem;
+		}
+
+		h1 {
+		  font-size: 2.5rem;
+		}
+
+		h2 {
+		  font-size: 2rem;
+		}
+
+		h3 {
+		  font-size: 1.5rem;
+		}
+
+		h4 {
+		  font-size: 1.2rem;
+		}
+
+		h5 {
+		  font-size: 1rem;
+		}
+
+		h6 {
+		  font-size: 0.9rem;
+		}
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+		  color: var(--foreground);
+		  line-height: 125%;
+		  margin-top: 2rem;
+		}
+
+		p {
+		  margin: 1rem 0;
+		}
+
+		a {
+		  text-decoration: underline;
+		  text-decoration-thickness: 2px;
+		  text-decoration-color: var(--hover);
+		  color: var(--foreground);
+		}
+
+		a:visited {
+		  color: var(--foreground);
+		}
+
+		a:hover {
+		  text-decoration: var(--sub);
+		}
+
+		a:active {
+		  color: var(--foreground);
+		  background: var(--hover);
+		}
+
+		ul,
+		ol {
+		  margin: 1rem 0;
+		  padding: 0 0 0 0 2rem;
+		}
+
+		ul ul,
+		ul ol,
+		ol ul,
+		ol ol {
+		  margin: 0.3rem 0;
+		}
+
+		li p:last-child {
+		  margin-bottom: 0;
+		}
+
+		blockquote {
+		  color: var(--sub);
+		  margin: 0;
+		  padding-left: 3em;
+		  border-left: 0.5em var(--subtle) solid;
+		}
+
+		hr {
+		  display: block;
+		  height: 2px;
+		  border: 0;
+		  border-top: 1px solid var(--subtle);
+		  border-bottom: 1px solid var(--subtle);
+		  margin: 1em 0;
+		  padding: 0;
+		}
+
+		pre,
+		code,
+		kbd,
+		samp {
+		  word-wrap: break-word;
+		  color: var(--foreground);
+		  font-family: monospace;
+		  font-size: 0.98em;
+		}
+
+		pre {
+		  white-space: pre;
+		  white-space: pre-wrap;
+		  word-wrap: break-word;
+		}
+
+		b,
+		strong {
+		  font-weight: bold;
+		}
+
+		dfn {
+		  font-style: italic;
+		}
+
+		ins {
+		  background: #ff9;
+		  color: #000;
+		  text-decoration: none;
+		}
+
+		sub,
+		sup {
+		  font-size: 75%;
+		  line-height: 0;
+		  position: relative;
+		  vertical-align: baseline;
+		}
+
+		sup {
+		  top: -0.5em;
+		}
+
+		sub {
+		  bottom: -0.25em;
+		}
+
+		/* Custom styles */
+		ul { padding: 0px; }
+		li { list-style: none; padding: 1rem; border-bottom: 2px solid #f8f8f8; font-weight: 500;}
+		.container { max-width: 600px; width: 100%; margin: 50px auto; }
+		.panel { text-align: center; padding: 10px; border: 0px; border-radius: 0.5rem; }
+		.failed-bg  { color: white; background-color: darkred; }
+		.success-bg { color: white; background-color: darkgreen; }
+		.failed  { color: darkred; }
+		.success { color: darkgreen; }
+		.small { font-size: .8rem; }
+		.status { float: right; }
+		.services { background: #eee; border-radius: .5rem }
+		/* Custom styles end */
 		</style>
 	</head>
 <body>
 <div class="container">
-<h1>${HEADER}</h1>
+<h2>${HEADER}</h2>
 EOF
 if [ "${OUTAGES_COUNT}" -ne 0 ]; then
     echo "<ul><li class='panel failed-bg'>${OUTAGES_COUNT} Outage(s)</li></ul>"
@@ -110,7 +458,7 @@ else
     echo "<ul><li class='panel success-bg'>All Systems Operational</li></ul>"
 fi
 cat << EOF
-<h1>Services</h1>
+<h2>Services</h2>
 <ul class="services">
 EOF
 for file in "${TMP_DIR}/"*.ko; do
